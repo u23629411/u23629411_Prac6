@@ -3,7 +3,7 @@
 namespace ProductList.Models
     {
     public class ProductRepository
-        {
+        {//create and add your list of suppliers
         public static List<Supplier> GetSuppliers()
         {
             return new List<Supplier>
