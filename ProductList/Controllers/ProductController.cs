@@ -38,6 +38,26 @@ namespace ProductList.Controllers
                 "text/plain"
             );
             }
+        public ActionResult GetCategoriesBySupplier(int supplierID)
+        {
+            var categories = ProductRepository.GetCategories()
+                .Where(c => c.SupplierID == supplierID)
+                .Select(c => new { c.Id, c.Name });
+
+            var categoryNames = new List<string>();
+            var categoryIds = new List<int>();
+            foreach (var category in categories)
+            {
+                categoryNames.Add(category.Name);
+                categoryIds.Add(category.Id);
+            }
+
+            return Content(
+                string.Format("{0};{1}", string.Join(",", categoryNames), string.Join(",", categoryIds)),
+                "text/plain"
+            );
+        }
+
 
         public ActionResult AddProduct(int productId, string productName)
             {
