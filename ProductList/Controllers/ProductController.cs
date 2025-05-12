@@ -38,6 +38,7 @@ namespace ProductList.Controllers
                 "text/plain"
             );
             }
+        //Added a new actionresult for supplier categories
         public ActionResult GetCategoriesBySupplier(int supplierID)
         {
             var categories = ProductRepository.GetCategories()

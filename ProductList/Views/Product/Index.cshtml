@@ -20,29 +20,47 @@
 </style>
 <br />
 <div class="row">
-    <div class="col-md-4">
-        <div class="mb-3">
-            <label for="categoryDropdown" class="form-label">Category:</label>
-            @Html.DropDownListFor(model => model.SelectedCategoryId,
-              new SelectList(Model.Categories, "Id", "Name"),
-              "Select a category",
-              new { @id = "categoryDropdown", @class = "form-select" })
-        </div>
 
-        <div class="mb-3">
-            <label for="productDropdown" class="form-label">Product:</label>
-            @Html.DropDownListFor(model => model.SelectedProductId,
-              Enumerable.Empty<SelectListItem>(),
-              "Select a product",
-              new { @id = "productDropdown", @class = "form-select", disabled = "disabled" })
-        </div>
+    <div class="row">
+        <div class="col">
+                  <div class="mb-3">
+          <label for="supplierDropdown" class="form-label">Supplier:</label>
+          @Html.DropDownListFor(model => model.SelectedSupplierID,
+            new SelectList(Model.Supplier, "Id", "Name"),
+            "Select a supplier",
+            new { @id = "supplierDropdown", @class = "form-select" })
+      </div>
+      <div class="mb-3">
+          <label for="categoryDropdown" class="form-label">Category:</label>
+          @Html.DropDownListFor(model => model.SelectedCategoryId,
+            new SelectList(Model.Categories, "Id", "Name"),
+            "Select a category",
+            new { @id = "categoryDropdown", @class = "form-select", disabled = "disabled" })
+      </div>
 
-        <label for="productNameTextbox" class="form-label">Value:</label>
-        <input type="text" id="productNameTextbox" class="form-control" placeholder="Only numbers are allowed" />
-        <div class="mb-3 d-grid gap-2" style="padding-top: 25px;">
-            <input type="button" id="addProductButton" value="Add" class="btn btn-primary" />
+      <div class="mb-3">
+          <label for="productDropdown" class="form-label">Product:</label>
+          @Html.DropDownListFor(model => model.SelectedProductId,
+            Enumerable.Empty<SelectListItem>(),
+            "Select a product",
+            new { @id = "productDropdown", @class = "form-select", disabled = "disabled" })
+      </div>
+        </div>
+        <div class="col">
+
+            <label for="productNameTextbox" class="form-label">Value:</label>
+            <input type="text" id="productNameTextbox" class="form-control" placeholder="Only numbers are allowed" />
+            <label for="productSerialTextbox" class="form-label">Serial:</label>
+            <input type="text" id="productSerialTextbox" maxlength="10" disabled class="form-control" placeholder="Only numbers are allowed" />
+            <div class="mb-3 d-grid gap-2" style="padding-top: 25px;">
+                <input type="button" disabled id="addProductButton" value="Add" class="btn btn-primary" />
+            </div>
         </div>
     </div>
+   
+  
+
+ 
     <div class="col-md-4">
     </div>
 
