@@ -80,9 +80,11 @@
         <thead style="position: sticky; top: 0; background-color: lightgrey;">
             <tr>
                 <th style="width: 5%;">ID</th>
+                <th style="width: 20%;">Supplier</th>
                 <th style="width: 20%;">Category</th>
                 <th style="width: 20%;">Product</th>
                 <th style="width: 20%;">Value</th>
+                <th style="width: 20%;">Serial</th>
                 <th style="width: 20%;">Timestamp</th>
                 <th style="width: 15%;">ACTION</th>
             </tr>
@@ -109,12 +111,35 @@
             }
             this.value = value;
 
+            if (value.length >= 1) {
+                $("#productSerialTextbox").prop("disabled", false) //enables the serial textbox
+            }
+            else {
+                $("#productSerialTextbox").prop("disabled", true)
+            }
+            
+
             if (value.length !== this.value.length) {
                 warning.style.display = "block";
             } else {
                 warning.style.display = "none";
+               
             }
         });
+        // 
+        const input2 = document.querySelector("#productSerialTextbox")
+        input2.addEventListener("input", function () {
+        var value = this.value.replace(/\D/g, '');
+        
+
+            if (value.length >=1) {
+                $("#addProductButton").prop("disabled", false) //enables button when the length of the textbox in serial is grater than 1
+            }
+            else {
+                $("#addProductButton").prop("disabled", true) // disable button when serial is empty
+            }
+
+ });
 
         // ----------------------------------------------------------------------
         // POPULATE DROPDOWNS
@@ -122,8 +147,36 @@
 
         $(function DropDownPopulater() {
 
-        $("#productNameTextbox").prop("disabled", true);
+            $("#productNameTextbox").prop("disabled", true);
+            $("#productSeriaTextbox").prop("disabled", true); //I added serial
 
+
+        $("#supplierDropdown").change(function () {
+    var supplierId = $(this).val();
+    if (supplierId) {
+        $.get('@Url.Action("GetCategoriesBySupplier", "Product")', { supplierId: supplierId })
+            .done(function (data) {
+                var categoryNames = data.split(";")[0].split(",");
+                var categoryIds = data.split(";")[1].split(",");
+                var categories = [];
+                for (var i = 0; i < categoryNames.length; i++) {
+                    categories.push({ id: categoryIds[i], name: categoryNames[i] });
+                }
+
+                var categoryDropdown = $("#categoryDropdown");
+                categoryDropdown.empty();
+                categoryDropdown.append($("<option></option>").val("").text("Select a category"));
+                $.each(categories, function (i, category) {
+                    categoryDropdown.append($("<option></option>").val(category.id).text(category.name));
+                });
+               categoryDropdown.prop("disabled", false);
+            });
+    } else {
+        $("#categoryDropdown").empty().append($("<option></option>").val("").text("Select a category")).prop("disabled", true);
+        $("#productNameTextbox").prop("disabled", true);
+        $("#productSerialTextbox").prop("disabled", true);
+    }
+});
         $("#categoryDropdown").change(function () {
             var categoryId = $(this).val();
             if (categoryId) {
@@ -180,6 +233,10 @@
 
                             newRow.append($("<td></td>").append(
                                 $("<select></select>").addClass("form-select").prop("disabled", true)
+                                    .append($("<option></option>").val($("#supplierDropdown").val()).text($("#supplierDropdown option:selected").text()))));
+
+                            newRow.append($("<td></td>").append(
+                                $("<select></select>").addClass("form-select").prop("disabled", true)
                                     .append($("<option></option>").val($("#categoryDropdown").val()).text($("#categoryDropdown option:selected").text()))));
 
                             newRow.append($("<td></td>").append(
@@ -191,6 +248,7 @@
                         // ----------------------------------------------------------------------
 
                             newRow.append($("<td></td>").append($("<input>").prop("type", "text").addClass("form-control").prop("disabled", true).val(productName)));
+
                             newRow.append($("<td></td>").text(new Date().toLocaleString()));
                             newRow.append($("<td></td>").append(
                                 $("<button></button>").text("EDIT").addClass("btn btn-success btn-sm").click(function () {
